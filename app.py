@@ -186,7 +186,7 @@ with tab_list:
 
 with tab_detail:
     with st.form("detail"):
-        c1, c2, _ = st.columns([2, 1, 5], vertical_alignment="bottom")
+        c1, c2, _ = st.columns([2, 1.3, 4.7], vertical_alignment="bottom")
         number = c1.text_input("구매오더 번호", value=ss.selected_po, max_chars=10)
         with c2:
             load = st.form_submit_button("불러오기", type="primary")
@@ -198,11 +198,16 @@ with tab_detail:
     if ss.order:
         order = ss.order
         st.subheader(f"구매오더 {order.get('PurchaseOrder', '')}")
-        left, right = st.columns([1, 2])
-        left.dataframe(header_pairs(order), hide_index=True, width="stretch")
+        # 품목 표는 열이 많아 한 줄 전체를 쓰고, 헤더(이름 · SAP 필드 · 값)는 그 아래 두 칸으로 나눈다(확대 125% 원격 화면에서 잘리지 않게)
         items = items_frame(order)
-        right.markdown(f"**품목 {len(items)}개**")
-        right.dataframe(items, hide_index=True, width="stretch")
+        st.markdown(f"**품목 {len(items)}개**")
+        st.dataframe(items, hide_index=True, width="stretch")
+        pairs = header_pairs(order)
+        half = (len(pairs) + 1) // 2
+        st.markdown("**헤더** · 화면 이름 옆에 SAP 필드 이름")
+        h1, h2 = st.columns(2)
+        h1.dataframe(pairs.iloc[:half], hide_index=True, width="stretch")
+        h2.dataframe(pairs.iloc[half:], hide_index=True, width="stretch")
 
 with tab_dash:
     st.caption("목록 탭의 조건으로 품목까지 불러와 집계합니다(구매오더 최대 500건).")
