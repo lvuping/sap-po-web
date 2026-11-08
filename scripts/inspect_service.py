@@ -33,8 +33,7 @@ def main() -> int:
     api = PurchaseOrderApi(Connection(build_base_url(args.host), args.client, args.user.upper()), secret)
     del secret
     try:
-        meta = api._get("$metadata")  # 진단용
-        root = ET.fromstring(meta.text)
+        root = ET.fromstring(api.metadata())
         for node in root.iter():
             if node.tag.endswith("EntityType") and node.attrib.get("Name") in WANTED:
                 props = [p.attrib["Name"] for p in node if p.tag.endswith("}Property")]

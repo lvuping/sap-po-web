@@ -49,7 +49,14 @@ digraph G {
 }
 """
 
+CHART_HEIGHT = 300  # 원격 PC 화면(약 1900×930)에서 KPI 와 차트 두 개가 한 화면에 들도록
+
 st.set_page_config(page_title="SAP 구매오더 웹", layout="wide")
+# 기본 위쪽 여백(6rem)을 줄여 표와 차트가 스크롤 없이 더 보이게 한다
+st.markdown(
+    '<style>[data-testid="stMainBlockContainer"]{padding-top:2rem}</style>',
+    unsafe_allow_html=True,
+)
 ss = st.session_state
 ss.setdefault("requests", [])
 ss.setdefault("api", None)
@@ -85,6 +92,13 @@ def connect(host: str, client: str, user: str, password: str) -> None:
         return
     ss.api, ss.nb_total = api, total
     st.rerun()
+
+
+def bar(frame: pd.DataFrame, x: str, y: str, title: str, **kwargs: str):
+    """막대 차트. 코드값은 숫자가 아니라 이름으로, 축 제목은 빼고(세로 한글이 눕는다) 단위는 제목에."""
+    fig = px.bar(frame, x=x, y=y, title=title, height=CHART_HEIGHT, **kwargs)
+    fig.update_xaxes(type="category", title=None).update_yaxes(title=None)
+    return fig.update_layout(margin={"t": 48, "b": 8, "l": 8, "r": 8})
 
 
 def disconnect() -> None:
@@ -124,7 +138,8 @@ with st.sidebar:
         if submitted:
             connect(host, client, user, password)
     if ss.api is not None:
-        st.success(f"연결됨 · {ss.api.conn.describe()}")
+        conn = ss.api.conn  # 좁은 사이드바에서 사용자 이름이 끊기지 않게 두 줄로
+        st.success(f"**연결됨** · {conn.label or 'SAP'}  \nclient {conn.client} · {conn.user}")
         st.caption(f"표준 구매오더(NB) {ss.nb_total:,}건")
         if not SAMPLE and st.button("연결 끊기"):
             disconnect()
@@ -171,8 +186,10 @@ with tab_list:
 
 with tab_detail:
     with st.form("detail"):
-        number = st.text_input("구매오더 번호", value=ss.selected_po, max_chars=10)
-        load = st.form_submit_button("불러오기", type="primary")
+        c1, c2, _ = st.columns([2, 1, 5], vertical_alignment="bottom")
+        number = c1.text_input("구매오더 번호", value=ss.selected_po, max_chars=10)
+        with c2:
+            load = st.form_submit_button("불러오기", type="primary")
     if load:
         try:
             ss.order = api.order(number)
@@ -210,21 +227,13 @@ with tab_dash:
         )
         g1, g2 = st.columns(2)
         per_company = heads.groupby("회사코드").size().reset_index(name="구매오더 수")
-        g1.plotly_chart(
-            px.bar(per_company, x="회사코드", y="구매오더 수", title="회사코드별 구매오더").update_xaxes(type="category"),
-            width="stretch",
-        )
+        g1.plotly_chart(bar(per_company, "회사코드", "구매오더 수", "회사코드별 구매오더 (건)"), width="stretch")
         top = (
             lines.groupby(["공급업체", "통화"])["순금액"].sum().reset_index().sort_values("순금액", ascending=False).head(10)
         )
-        g2.plotly_chart(
-            px.bar(top, x="공급업체", y="순금액", color="통화", title="공급업체별 순금액 상위 10").update_xaxes(type="category"),
-            width="stretch",
-        )
+        g2.plotly_chart(bar(top, "공급업체", "순금액", "공급업체별 순금액 상위 10", color="통화"), width="stretch")
         per_month = heads.groupby("월").size().reset_index(name="구매오더 수")
-        st.plotly_chart(
-            px.bar(per_month, x="월", y="구매오더 수", title="월별 구매오더").update_xaxes(type="category"), width="stretch"
-        )
+        st.plotly_chart(bar(per_month, "월", "구매오더 수", "월별 구매오더 (건)"), width="stretch")
         st.caption("순금액 = 순단가 × 수량 ÷ 가격단위의 통화별 합계입니다. 환율은 적용하지 않습니다.")
 
 with tab_how:

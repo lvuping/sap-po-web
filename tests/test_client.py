@@ -103,6 +103,24 @@ def test_select_fallback_on_400() -> None:
     assert api.list_orders(PoFilter()) == [{"PurchaseOrder": "1"}]
 
 
+def test_metadata_asks_for_xml_and_data_for_json() -> None:
+    # SAP 는 $metadata 에 Accept: application/json 이면 406 을 준다(T41 2026-11-08)
+    seen: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen[request.url.path.rsplit("/", 1)[-1]] = request.headers["accept"]
+        if request.url.path.endswith("$metadata"):
+            if "xml" not in request.headers["accept"]:
+                return httpx.Response(406)
+            return httpx.Response(200, text="<edmx:Edmx/>")
+        return httpx.Response(200, text="3")
+
+    api = PurchaseOrderApi(Connection(BASE, "400", "T"), "pw", transport=httpx.MockTransport(handler))
+    assert api.metadata() == "<edmx:Edmx/>"
+    assert api.count(PoFilter()) == 3
+    assert seen == {"$metadata": "application/xml", "$count": "application/json"}
+
+
 def test_401_is_auth_error_without_retry() -> None:
     calls = []
 

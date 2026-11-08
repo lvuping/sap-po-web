@@ -118,14 +118,15 @@ class PurchaseOrderApi:
         self._http.close()
 
     # 요청 한 번
-    def _get(self, url: str, params: dict[str, str] | None = None) -> httpx.Response:
+    def _get(self, url: str, params: dict[str, str] | None = None, *, accept: str | None = None) -> httpx.Response:
         # httpx 는 클라이언트 기본 params 가 있으면 주소의 쿼리를 버린다 → 요청마다 직접 합친다
         target = httpx.URL(url)
         query = {"sap-client": self.conn.client, **dict(target.params.multi_items()), **(params or {})}
+        headers = {"Accept": accept} if accept else None
         started = time.perf_counter()
         status = 0
         try:
-            res = self._http.get(target.copy_with(query=None), params=query)
+            res = self._http.get(target.copy_with(query=None), params=query, headers=headers)
             status = res.status_code
         except httpx.TimeoutException as exc:
             raise SapApiError("SAP 응답이 시간 안에 오지 않았습니다.") from exc
@@ -184,6 +185,10 @@ class PurchaseOrderApi:
             res = self._get(str(self._root.join(next_link)))
 
     # 조회
+    def metadata(self) -> str:
+        """서비스 정의(CSDL XML). JSON 만 받겠다고 하면 SAP 가 406 을 준다."""
+        return self._get("$metadata", accept="application/xml").text
+
     def count(self, flt: PoFilter) -> int:
         params = {"$filter": expr} if (expr := flt.expression()) else {}
         return int(self._get("PurchaseOrder/$count", params).text.strip())
