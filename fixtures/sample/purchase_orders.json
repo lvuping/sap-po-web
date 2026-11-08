@@ -1,0 +1,239 @@
+{
+  "_note": "지어낸 예시 데이터다. 어느 SAP 시스템의 실제 값도 아니다. 화면 개발·시험용.",
+  "value": [
+    {
+      "PurchaseOrder": "4509000001",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1010",
+      "PurchasingOrganization": "10PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000001",
+      "PurchaseOrderDate": "2025-03-04",
+      "DocumentCurrency": "EUR",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000001",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-01",
+          "PurchaseOrderItemText": "예시 자재 1",
+          "OrderQuantity": "10",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "12.50",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        },
+        {
+          "PurchaseOrder": "4509000001",
+          "PurchaseOrderItem": "20",
+          "Material": "DEMO-MAT-02",
+          "PurchaseOrderItemText": "예시 자재 2",
+          "OrderQuantity": "4",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "80.00",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000002",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1010",
+      "PurchasingOrganization": "10PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000001",
+      "PurchaseOrderDate": "2025-03-18",
+      "DocumentCurrency": "EUR",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000002",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-03",
+          "PurchaseOrderItemText": "예시 자재 3",
+          "OrderQuantity": "100",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "45.00",
+          "NetPriceQuantity": "100",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000003",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1010",
+      "PurchasingOrganization": "10PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000002",
+      "PurchaseOrderDate": "2025-04-02",
+      "DocumentCurrency": "EUR",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000003",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-01",
+          "PurchaseOrderItemText": "예시 자재 1",
+          "OrderQuantity": "20",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "12.50",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000004",
+      "PurchaseOrderType": "FO",
+      "CompanyCode": "1010",
+      "PurchasingOrganization": "10PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000002",
+      "PurchaseOrderDate": "2025-04-10",
+      "DocumentCurrency": "EUR",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000004",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-04",
+          "PurchaseOrderItemText": "예시 서비스",
+          "OrderQuantity": "1",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "500.00",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000005",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1710",
+      "PurchasingOrganization": "17PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000003",
+      "PurchaseOrderDate": "2025-04-22",
+      "DocumentCurrency": "USD",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000005",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-05",
+          "PurchaseOrderItemText": "예시 자재 5",
+          "OrderQuantity": "3",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "199.99",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "USD",
+          "Plant": "1710",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000006",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1710",
+      "PurchasingOrganization": "17PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000003",
+      "PurchaseOrderDate": "2025-05-06",
+      "DocumentCurrency": "USD",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000006",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-05",
+          "PurchaseOrderItemText": "예시 자재 5",
+          "OrderQuantity": "6",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "199.99",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "USD",
+          "Plant": "1710",
+          "MaterialGroup": "DEMO"
+        },
+        {
+          "PurchaseOrder": "4509000006",
+          "PurchaseOrderItem": "20",
+          "Material": "DEMO-MAT-06",
+          "PurchaseOrderItemText": "예시 자재 6",
+          "OrderQuantity": "2",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "15.00",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "USD",
+          "Plant": "1710",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000007",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1710",
+      "PurchasingOrganization": "17PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000004",
+      "PurchaseOrderDate": "2025-05-27",
+      "DocumentCurrency": "USD",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000007",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-06",
+          "PurchaseOrderItemText": "예시 자재 6",
+          "OrderQuantity": "40",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "15.00",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "USD",
+          "Plant": "1710",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    },
+    {
+      "PurchaseOrder": "4509000008",
+      "PurchaseOrderType": "NB",
+      "CompanyCode": "1010",
+      "PurchasingOrganization": "10PO",
+      "PurchasingGroup": "001",
+      "Supplier": "90000004",
+      "PurchaseOrderDate": "2025-06-12",
+      "DocumentCurrency": "EUR",
+      "PaymentTerms": "0004",
+      "_PurchaseOrderItem": [
+        {
+          "PurchaseOrder": "4509000008",
+          "PurchaseOrderItem": "10",
+          "Material": "DEMO-MAT-02",
+          "PurchaseOrderItemText": "예시 자재 2",
+          "OrderQuantity": "1",
+          "PurchaseOrderQuantityUnit": "PC",
+          "NetPriceAmount": "80.00",
+          "NetPriceQuantity": "1",
+          "DocumentCurrency": "EUR",
+          "Plant": "1010",
+          "MaterialGroup": "DEMO"
+        }
+      ]
+    }
+  ]
+}

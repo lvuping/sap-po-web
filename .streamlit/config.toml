@@ -1,0 +1,15 @@
+# 포트 1637: tools/ports/README.md 의 SAP 강의 칸(1630–1639)에 등록한 번호
+[server]
+address = "127.0.0.1"
+port = 1637
+headless = true
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "viewer"
+
+[theme]
+primaryColor = "#0a6ed1"
