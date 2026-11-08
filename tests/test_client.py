@@ -178,3 +178,22 @@ def test_frames() -> None:
     assert list(items["품목"]) == ["10", "20"] and list(items["순금액"]) == ["125.00", "320.00"]
     lines = item_rows(api.orders_with_items(PoFilter()))
     assert len(lines) == 9 and lines.groupby("통화")["순금액"].sum().round(2).to_dict() == {"EUR": 820.0, "USD": 2429.91}
+
+
+def test_inspect_maps_entity_set_to_type() -> None:
+    # RAP V4: 세트 PurchaseOrder 의 타입은 PurchaseOrderType (T41 2026-11-08 에 이름이 안 맞아 목록이 비었다)
+    from scripts.inspect_service import entity_fields
+
+    xml = """<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx"><edmx:DataServices>
+    <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="com.sap.gateway.srvd_a2x.api_purchaseorder_2.v0001">
+      <EntityType Name="PurchaseOrderType"><Property Name="PurchaseOrder"/><Property Name="Supplier"/>
+        <NavigationProperty Name="_PurchaseOrderItem"/></EntityType>
+      <EntityType Name="PurchaseOrderItemType"><Property Name="PurchaseOrderItem"/></EntityType>
+      <EntityContainer Name="Container">
+        <EntitySet Name="PurchaseOrder" EntityType="com.sap.gateway.srvd_a2x.api_purchaseorder_2.v0001.PurchaseOrderType"/>
+        <EntitySet Name="PurchaseOrderItem" EntityType="com.sap.gateway.srvd_a2x.api_purchaseorder_2.v0001.PurchaseOrderItemType"/>
+      </EntityContainer></Schema></edmx:DataServices></edmx:Edmx>"""
+    assert entity_fields(xml, ("PurchaseOrder", "PurchaseOrderItem")) == [
+        ("PurchaseOrder", ["PurchaseOrder", "Supplier"], ["_PurchaseOrderItem"]),
+        ("PurchaseOrderItem", ["PurchaseOrderItem"], []),
+    ]

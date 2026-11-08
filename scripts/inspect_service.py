@@ -21,6 +21,24 @@ from sap_po import Connection, PoFilter, PurchaseOrderApi, SapApiError, build_ba
 WANTED = ("PurchaseOrder", "PurchaseOrderItem")
 
 
+def entity_fields(metadata_xml: str, set_names: tuple[str, ...]) -> list[tuple[str, list[str], list[str]]]:
+    """엔터티 세트 이름 → (세트, 필드, 내비게이션). RAP V4 는 타입 이름이 세트와 다르다(PurchaseOrder → PurchaseOrderType)."""
+    root = ET.fromstring(metadata_xml)
+    types = {n.attrib.get("Name"): n for n in root.iter() if n.tag.endswith("}EntityType")}
+    sets = {n.attrib.get("Name"): n.attrib.get("EntityType", "") for n in root.iter() if n.tag.endswith("}EntitySet")}
+    out = []
+    for name in set_names:
+        node = types.get(sets.get(name, name).rsplit(".", 1)[-1])
+        if node is None:  # 세트 정의가 없는 서비스: 타입 이름이 세트와 같다고 본다
+            node = types.get(name)
+        if node is None:
+            continue
+        props = [p.attrib["Name"] for p in node if p.tag.endswith("}Property")]
+        navs = [p.attrib["Name"] for p in node if p.tag.endswith("}NavigationProperty")]
+        out.append((name, props, navs))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--host", required=True)
@@ -33,14 +51,10 @@ def main() -> int:
     api = PurchaseOrderApi(Connection(build_base_url(args.host), args.client, args.user.upper()), secret)
     del secret
     try:
-        root = ET.fromstring(api.metadata())
-        for node in root.iter():
-            if node.tag.endswith("EntityType") and node.attrib.get("Name") in WANTED:
-                props = [p.attrib["Name"] for p in node if p.tag.endswith("}Property")]
-                navs = [p.attrib["Name"] for p in node if p.tag.endswith("}NavigationProperty")]
-                print(f"[{node.attrib['Name']}] 필드 {len(props)}개")
-                print("  " + ", ".join(props))
-                print(f"  내비게이션: {', '.join(navs) or '없음'}")
+        for name, props, navs in entity_fields(api.metadata(), WANTED):
+            print(f"[{name}] 필드 {len(props)}개")
+            print("  " + ", ".join(props))
+            print(f"  내비게이션: {', '.join(navs) or '없음'}")
         print(f"NB 구매오더 수: {api.count(PoFilter())}")
         if args.po:
             order = api.order(args.po)
